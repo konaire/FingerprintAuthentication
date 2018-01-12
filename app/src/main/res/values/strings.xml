@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Authorization by fingerprint</string>
+
+    <!-- Auth -->
+    <string name="auth_button">Authorization</string>
+
+    <string name="auth_none">Authorization isn\'t done</string>
+    <string name="auth_success">Authorization was successful</string>
+    <string name="auth_failure">Authorization failed</string>
+
+    <!-- Dialog -->
+    <string name="dialog_start_scanning_hint">Touch fingerprint sensor</string>
 </resources>
