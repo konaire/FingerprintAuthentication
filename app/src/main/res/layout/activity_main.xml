@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="@dimen/default_gap"
     android:orientation="vertical"
     android:gravity="center">
 
@@ -10,6 +11,7 @@
         android:id="@+id/auth_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
         android:text="@string/auth_none"
         android:textColor="@android:color/black"
         android:textSize="@dimen/default_text_size" />
@@ -19,8 +21,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/default_gap"
-        android:paddingLeft="@dimen/default_gap"
-        android:paddingRight="@dimen/default_gap"
+        android:paddingStart="@dimen/default_gap"
+        android:paddingEnd="@dimen/default_gap"
         android:textAllCaps="false"
         android:text="@string/auth_button"
         android:textColor="@android:color/black"

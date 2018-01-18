@@ -1,5 +1,7 @@
 package io.codebeavers.fingerprintauth.network;
 
+import android.annotation.SuppressLint;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -7,12 +9,13 @@ import java.util.Map;
  * Created by Evgeny Eliseyev on 12/01/2018.
  */
 
+@SuppressLint("StaticFieldLeak")
 public class SimpleAuthService {
     private static SimpleAuthService instance;
     private final Map<String, String> users;
 
     // Implemented singleton pattern. We don't need wrong states here, do we?
-    public synchronized SimpleAuthService getInstance() {
+    public static synchronized SimpleAuthService getInstance() {
         if (instance == null) {
             instance = new SimpleAuthService();
         }
