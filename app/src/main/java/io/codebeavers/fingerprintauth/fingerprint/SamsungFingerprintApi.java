@@ -2,25 +2,16 @@ package io.codebeavers.fingerprintauth.fingerprint;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-
-import com.samsung.android.sdk.pass.SpassFingerprint;
 
 /**
  * Created by Evgeny Eliseyev on 16/01/2018.
  */
 
 @SuppressLint("StaticFieldLeak")
-public final class SamsungFingerprintApi implements FingerprintApi {
-    private final class SamsungFingerprintHandler extends SpassFingerprint {
-        SamsungFingerprintHandler(Context context) {
-            super(context);
-        }
-    }
-
+final class SamsungFingerprintApi extends FingerprintApi {
     private static final String PERMISSION = "com.samsung.android.providers.context.permission.WRITE_USE_APP_FEATURE_SURVEY";
 
     private static SamsungFingerprintApi instance;
@@ -49,5 +40,15 @@ public final class SamsungFingerprintApi implements FingerprintApi {
         } else {
             return fingerprintHandler.hasRegisteredFinger();
         }
+    }
+
+    @Override
+    public void start() {
+        fingerprintHandler.start();
+    }
+
+    @Override
+    public void cancel() {
+        fingerprintHandler.cancel();
     }
 }

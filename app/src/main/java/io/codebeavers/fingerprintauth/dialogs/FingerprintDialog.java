@@ -17,9 +17,13 @@ import io.codebeavers.fingerprintauth.R;
  * Created by Evgeny Eliseyev on 12/01/2018.
  */
 
-public class FingerprintDialog extends DialogFragment implements DialogInterface.OnClickListener {
-    public static FingerprintDialog getInstance() {
-        return new FingerprintDialog();
+public class FingerprintDialog extends DialogFragment {
+    private DialogInterface.OnClickListener listener;
+
+    public static FingerprintDialog getInstance(DialogInterface.OnClickListener listener) {
+        FingerprintDialog dialog = new FingerprintDialog();
+        dialog.listener = listener;
+        return dialog;
     }
 
     @NonNull
@@ -31,16 +35,11 @@ public class FingerprintDialog extends DialogFragment implements DialogInterface
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         View view = LayoutInflater.from(activity).inflate(R.layout.dialog_fingerprint, null, false);
 
-        builder.setTitle(R.string.app_name)
-            .setCancelable(true)
-            .setView(view)
-            .setNegativeButton(android.R.string.cancel, this);
+        builder.setView(view)
+            .setTitle(R.string.app_name)
+            .setNegativeButton(android.R.string.cancel, listener);
 
+        setCancelable(false);
         return builder.create();
-    }
-
-    @Override
-    public void onClick(DialogInterface dialog, int which) {
-        dismiss();
     }
 }

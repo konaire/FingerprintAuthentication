@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.app.KeyguardManager;
 import android.content.pm.PackageManager;
 import android.hardware.fingerprint.FingerprintManager;
+import android.os.CancellationSignal;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 
@@ -14,10 +15,11 @@ import android.support.v4.content.ContextCompat;
  */
 
 @SuppressLint("StaticFieldLeak")
-public final class MarshmallowFingerprintApi implements FingerprintApi {
+final class MarshmallowFingerprintApi extends FingerprintApi {
     private static MarshmallowFingerprintApi instance;
 
     private final Activity activity;
+    private CancellationSignal cancellationSignal; // used to cancel authorisation
 
     public static synchronized MarshmallowFingerprintApi getInstance(Activity activity) {
         if (instance == null) {
@@ -43,5 +45,26 @@ public final class MarshmallowFingerprintApi implements FingerprintApi {
 
         return hasPermission && keyguardManager != null && fingerprintManager != null &&
             keyguardManager.isKeyguardSecure() && fingerprintManager.hasEnrolledFingerprints();
+    }
+
+    @Override
+    public void start() {
+        cancellationSignal = new CancellationSignal();
+        FingerprintManager fingerprintManager = (FingerprintManager) activity.getSystemService(Activity.FINGERPRINT_SERVICE);
+        FingerprintManager.CryptoObject cryptoObject = new FingerprintManager.CryptoObject(CryptoManager.getInstance().getCipher());
+        // Create/get a key, check it and return CryptoObject which can be used for encrypt/decrypt some password or pin.
+
+        if (fingerprintManager != null) {
+            // Start authentication. new MarshmallowFingerprintHandler() creates object for receiving a callback.
+            fingerprintManager.authenticate(cryptoObject, cancellationSignal, 0, new MarshmallowFingerprintHandler(), null);
+        }
+    }
+
+    @Override
+    public void cancel() {
+        if (cancellationSignal != null) {
+            cancellationSignal.cancel();
+            cancellationSignal = null;
+        }
     }
 }

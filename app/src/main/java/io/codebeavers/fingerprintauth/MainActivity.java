@@ -1,7 +1,7 @@
 package io.codebeavers.fingerprintauth;
 
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
-import android.hardware.fingerprint.FingerprintManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,16 +9,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.samsung.android.sdk.pass.Spass;
-
 import io.codebeavers.fingerprintauth.dialogs.FingerprintDialog;
-import io.codebeavers.fingerprintauth.fingerprint.*;
+import io.codebeavers.fingerprintauth.fingerprint.FingerprintApi;
 
 /**
  * Created by Evgeny Eliseyev on 12/01/2018.
  */
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements DialogInterface.OnClickListener {
     private static final String FINGERPRINT_DIALOG = "fingerprint_dialog";
 
     private FingerprintApi api;
@@ -46,23 +44,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onClick(DialogInterface dialog, int which) {
+        dialog.dismiss();
+        api.cancel();
+    }
+
     private boolean isFingerprintSupported() {
-        FingerprintManager fingerprintManager = (FingerprintManager) getSystemService(FINGERPRINT_SERVICE);
-        Spass spassInstance = new Spass();
-
-        try {
-            // Firstly check availability of android api, secondly check for samsung api
-            if (fingerprintManager != null && fingerprintManager.isHardwareDetected()) {
-                api = MarshmallowFingerprintApi.getInstance(this);
-            } else if (spassInstance.isFeatureEnabled(Spass.DEVICE_FINGERPRINT)) {
-                api = SamsungFingerprintApi.getInstance(this);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        // Finally check for any additional requirements of the api
-        return api != null && api.isFingerprintSupported();
+        // Check for availability and any additional requirements for the api.
+        return (api = FingerprintApi.create(this)) != null && api.isFingerprintSupported();
     }
 
     private void checkFingerprintAvailability() {
@@ -73,7 +63,9 @@ public class MainActivity extends AppCompatActivity {
             buttonView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    FingerprintDialog.getInstance().show(getSupportFragmentManager(), FINGERPRINT_DIALOG);
+                    api.start();
+                    FingerprintDialog.getInstance(MainActivity.this)
+                        .show(getSupportFragmentManager(), FINGERPRINT_DIALOG);
                 }
             });
         } else {
