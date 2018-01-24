@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Authorization by fingerprint</string>
+    <string name="app_name">Authorisation by fingerprint</string>
 
     <!-- Auth -->
-    <string name="auth_button">Authorization</string>
+    <string name="auth_button">Authorisation</string>
 
-    <string name="auth_none">Authorization isn\'t done.</string>
+    <string name="auth_none">Authorisation isn\'t done.</string>
     <string name="auth_init_error">Error has occurred.\nYour device doesn\'t have a fingerprint sensor.\nOr you didn\'t enable fingerprints on lock screen.</string>
-    <string name="auth_success">Authorization was successful.</string>
-    <string name="auth_failure">Authorization failed.</string>
+    <string name="auth_success">Authorisation was successful.</string>
+    <string name="auth_failure">Authorisation failed.</string>
+    <string name="auth_canceled">Authorisation canceled.</string>
+    <string name="auth_error">Authorisation error. Code #%d.</string>
 
     <!-- Dialog -->
     <string name="dialog_start_scanning_hint">Touch fingerprint sensor</string>

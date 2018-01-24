@@ -3,6 +3,7 @@ package io.codebeavers.fingerprintauth.fingerprint;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.pm.PackageManager;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 
@@ -19,7 +20,7 @@ final class SamsungFingerprintApi extends FingerprintApi {
     private final Activity activity;
     private final SamsungFingerprintHandler fingerprintHandler;
 
-    public static synchronized SamsungFingerprintApi getInstance(Activity activity) {
+    static synchronized SamsungFingerprintApi getInstance(@NonNull Activity activity) {
         if (instance == null) {
             instance = new SamsungFingerprintApi(activity);
         }
@@ -43,7 +44,8 @@ final class SamsungFingerprintApi extends FingerprintApi {
     }
 
     @Override
-    public void start() {
+    public void start(@NonNull Callback callback) {
+        fingerprintHandler.setCallback(callback);
         fingerprintHandler.start();
     }
 

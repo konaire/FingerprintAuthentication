@@ -37,7 +37,7 @@ class CryptoManager {
 
     private CryptoManager() {}
 
-    /***
+    /**
      * The method goes all steps for creating a valid cipher. It creates or recreates key if needed.
      * @return valid cipher for authentication.
      */
@@ -45,7 +45,7 @@ class CryptoManager {
         return isKeyValid() ? cipher : null;
     }
 
-    /***
+    /**
      * The method returns a valid public key. It creates or recreates key if needed.
      * @return base64 representation of public key.
      */

@@ -8,18 +8,26 @@ import android.hardware.fingerprint.FingerprintManager;
 
 @SuppressWarnings("unused")
 class MarshmallowFingerprintHandler extends FingerprintManager.AuthenticationCallback {
+    private final FingerprintApi.Callback callback;
+
+    MarshmallowFingerprintHandler(FingerprintApi.Callback callback) {
+        this.callback = callback;
+    }
+
     @Override
     public void onAuthenticationSucceeded(FingerprintManager.AuthenticationResult result) {
-        // TODO: Correct fingerprint
+        callback.onSuccess(CryptoManager.getInstance().getPublicKey());
     }
 
     @Override
     public void onAuthenticationFailed() {
-        // TODO: Wrong fingerprint
+        callback.onFailure();
     }
 
     @Override
     public void onAuthenticationError(int errorCode, CharSequence errorString) {
-        // TODO: Error at authorisation
+        if (errorCode != FingerprintManager.FINGERPRINT_ERROR_USER_CANCELED) {
+            callback.onError(errorCode);
+        }
     }
 }

@@ -7,6 +7,7 @@ import android.app.KeyguardManager;
 import android.content.pm.PackageManager;
 import android.hardware.fingerprint.FingerprintManager;
 import android.os.CancellationSignal;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 
@@ -21,7 +22,7 @@ final class MarshmallowFingerprintApi extends FingerprintApi {
     private final Activity activity;
     private CancellationSignal cancellationSignal; // used to cancel authorisation
 
-    public static synchronized MarshmallowFingerprintApi getInstance(Activity activity) {
+    static synchronized MarshmallowFingerprintApi getInstance(@NonNull Activity activity) {
         if (instance == null) {
             instance = new MarshmallowFingerprintApi(activity);
         }
@@ -48,7 +49,7 @@ final class MarshmallowFingerprintApi extends FingerprintApi {
     }
 
     @Override
-    public void start() {
+    public void start(@NonNull Callback callback) {
         cancellationSignal = new CancellationSignal();
         FingerprintManager fingerprintManager = (FingerprintManager) activity.getSystemService(Activity.FINGERPRINT_SERVICE);
         FingerprintManager.CryptoObject cryptoObject = new FingerprintManager.CryptoObject(CryptoManager.getInstance().getCipher());
@@ -56,7 +57,7 @@ final class MarshmallowFingerprintApi extends FingerprintApi {
 
         if (fingerprintManager != null) {
             // Start authentication. new MarshmallowFingerprintHandler() creates object for receiving a callback.
-            fingerprintManager.authenticate(cryptoObject, cancellationSignal, 0, new MarshmallowFingerprintHandler(), null);
+            fingerprintManager.authenticate(cryptoObject, cancellationSignal, 0, new MarshmallowFingerprintHandler(callback), null);
         }
     }
 

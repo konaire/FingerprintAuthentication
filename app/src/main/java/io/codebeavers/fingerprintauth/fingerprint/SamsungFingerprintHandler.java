@@ -11,6 +11,7 @@ import com.samsung.android.sdk.pass.SpassFingerprint;
 
 class SamsungFingerprintHandler extends SpassFingerprint implements SpassFingerprint.IdentifyListener {
     private boolean isIdentifing; // true if auth is in progress
+    private FingerprintApi.Callback callback;
 
     SamsungFingerprintHandler(Context context) {
         super(context);
@@ -27,8 +28,25 @@ class SamsungFingerprintHandler extends SpassFingerprint implements SpassFingerp
 
     @Override
     public void onFinished(int eventStatus) {
-        // TODO: Handle authorisation statuses
+        if (callback != null) {
+            switch (eventStatus) {
+                case STATUS_AUTHENTIFICATION_SUCCESS:
+                    callback.onSuccess(CryptoManager.getInstance().getPublicKey()); break;
+                case STATUS_USER_CANCELLED:
+                    break; // nothing to do
+                case STATUS_QUALITY_FAILED:
+                case STATUS_AUTHENTIFICATION_FAILED:
+                    callback.onFailure(); break;
+                default:
+                    callback.onError(eventStatus); break;
+            }
+        }
+
         isIdentifing = false;
+    }
+
+    void setCallback(FingerprintApi.Callback callback) {
+        this.callback = callback;
     }
 
     void start() {
